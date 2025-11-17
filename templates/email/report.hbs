@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+        }
+        .info-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sistema de Monitoreo de Tanques de Gas</h1>
+        </div>
+        <div class="content">
+            <h2>{{reportType}} Generado</h2>
+            <p>Estimado usuario,</p>
+            <p>Se ha generado exitosamente el <strong>{{reportType}}</strong> solicitado. El informe está adjunto a este correo en formato PDF.</p>
+
+            <div class="info-box">
+                <p><strong>Fecha de Generación:</strong> {{generatedDate}}</p>
+                {{#if reportData.period}}
+                <p><strong>Período:</strong> {{reportData.period.start}} - {{reportData.period.end}}</p>
+                {{/if}}
+                {{#if reportData.tank}}
+                <p><strong>Tanque:</strong> {{reportData.tank.code}}</p>
+                {{/if}}
+                {{#if reportData.client}}
+                <p><strong>Cliente:</strong> {{reportData.client.name}}</p>
+                {{/if}}
+            </div>
+
+            <p>Por favor, revise el documento adjunto para ver el informe completo con todos los detalles, gráficos y estadísticas.</p>
+
+            <p>Si necesita información adicional o tiene alguna pregunta sobre este informe, no dude en contactarnos.</p>
+        </div>
+        <div class="footer">
+            <p>Este es un correo automático del Sistema de Monitoreo de Tanques de Gas</p>
+            <p>Por favor, no responda a este correo</p>
+        </div>
+    </div>
+</body>
+</html>

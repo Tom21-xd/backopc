@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .header h2 {
+            margin: 10px 0 0 0;
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: normal;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 4px solid #667eea;
+        }
+
+        .summary-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        thead {
+            background: #667eea;
+            color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .alert-count {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+
+        .alert-critical {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .chart-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #e9ecef;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 2px solid #dee2e6;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+
+        .client-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .client-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .client-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .tank-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .tank-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .tank-code {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .tank-info {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .level-indicator {
+            display: inline-block;
+            width: 100px;
+            margin-left: 10px;
+        }
+
+        .critical {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .warning {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .normal {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>INFORME GENERAL DEL SISTEMA</h1>
+        <h2>Sistema de Monitoreo de Tanques de Gas</h2>
+        <p>Período: {{period.start}} - {{period.end}}</p>
+        <p>Generado el {{formatDate generatedDate}}</p>
+    </div>
+
+    <!-- Resumen General -->
+    <div class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-value">{{statistics.totalTanks}}</div>
+            <div class="summary-label">Tanques Totales</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-value">{{statistics.activeTanks}}</div>
+            <div class="summary-label">Tanques Activos</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-value">{{statistics.totalClients}}</div>
+            <div class="summary-label">Clientes</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-value">{{statistics.activeAlerts}}</div>
+            <div class="summary-label">Alertas Activas</div>
+        </div>
+    </div>
+
+    <!-- Estado de Tanques -->
+    <div class="section">
+        <h2 class="section-title">Estado Actual de Tanques</h2>
+        <div class="chart-container">
+            <h3>Distribución de Niveles de Gas</h3>
+            <div style="margin: 20px 0;">
+                <div style="margin-bottom: 15px;">
+                    <span>Nivel Crítico (&lt;10%)</span>
+                    <span class="alert-count alert-critical">{{statistics.criticalTanks}} tanques</span>
+                    <div class="progress-bar" style="margin-top: 5px;">
+                        <div class="progress-fill" style="width: {{statistics.criticalPercentage}}%; background: #dc3545;">
+                            {{statistics.criticalPercentage}}%
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <span>Nivel Bajo (10-20%)</span>
+                    <span class="alert-count alert-warning">{{statistics.lowTanks}} tanques</span>
+                    <div class="progress-bar" style="margin-top: 5px;">
+                        <div class="progress-fill" style="width: {{statistics.lowPercentage}}%; background: #ffc107;">
+                            {{statistics.lowPercentage}}%
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <span>Nivel Normal (&gt;20%)</span>
+                    <span class="alert-count alert-info">{{statistics.normalTanks}} tanques</span>
+                    <div class="progress-bar" style="margin-top: 5px;">
+                        <div class="progress-fill" style="width: {{statistics.normalPercentage}}%; background: #28a745;">
+                            {{statistics.normalPercentage}}%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tanques Críticos -->
+    {{#if criticalTanks}}
+    <div class="section">
+        <h2 class="section-title">⚠️ Tanques con Nivel Crítico</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Cliente</th>
+                    <th>Ubicación</th>
+                    <th>Nivel Actual</th>
+                    <th>Última Recarga</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each criticalTanks}}
+                <tr>
+                    <td><strong>{{this.code}}</strong></td>
+                    <td>{{#if this.client.companyName}}{{this.client.companyName}}{{else}}{{this.client.firstName}} {{this.client.lastName}}{{/if}}</td>
+                    <td>{{this.location}}</td>
+                    <td class="critical">{{percentage this.currentLevelPercentage}}</td>
+                    <td>{{formatDate this.lastRechargeDate}}</td>
+                    <td>
+                        <span class="status-badge status-warning">CRÍTICO</span>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{/if}}
+
+    <!-- Resumen de Alertas -->
+    <div class="section">
+        <h2 class="section-title">Resumen de Alertas</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo de Alerta</th>
+                    <th>Activas</th>
+                    <th>Reconocidas</th>
+                    <th>Resueltas (Período)</th>
+                    <th>Total (Período)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each alertsSummary}}
+                <tr>
+                    <td>{{this.type}}</td>
+                    <td>
+                        <span class="alert-count alert-critical">{{this.active}}</span>
+                    </td>
+                    <td>
+                        <span class="alert-count alert-warning">{{this.acknowledged}}</span>
+                    </td>
+                    <td>
+                        <span class="alert-count alert-info">{{this.resolved}}</span>
+                    </td>
+                    <td><strong>{{this.total}}</strong></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- Recargas del Período -->
+    <div class="section">
+        <h2 class="section-title">Recargas del Período</h2>
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="summary-value">{{rechargeStats.total}}</div>
+                <div class="summary-label">Total Recargas</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value">{{rechargeStats.completed}}</div>
+                <div class="summary-label">Completadas</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value">{{rechargeStats.scheduled}}</div>
+                <div class="summary-label">Programadas</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value">{{liters rechargeStats.totalLiters}}</div>
+                <div class="summary-label">Total Litros</div>
+            </div>
+        </div>
+
+        {{#if upcomingRecharges}}
+        <h3 style="margin-top: 30px;">Próximas Recargas Programadas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Tanque</th>
+                    <th>Cliente</th>
+                    <th>Cantidad Estimada</th>
+                    <th>Solicitado Por</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each upcomingRecharges}}
+                <tr>
+                    <td>{{formatDate this.scheduledDate}}</td>
+                    <td>{{this.tank.code}}</td>
+                    <td>{{#if this.tank.client.companyName}}{{this.tank.client.companyName}}{{else}}{{this.tank.client.firstName}}{{/if}}</td>
+                    <td>{{liters this.estimatedQuantityLiters}}</td>
+                    <td>{{this.requestedBy}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        {{/if}}
+    </div>
+
+    <!-- Resumen por Cliente -->
+    <div class="section">
+        <h2 class="section-title">Resumen por Cliente</h2>
+        {{#each clientsSummary}}
+        <div class="client-section">
+            <div class="client-header">
+                <div class="client-name">
+                    {{#if this.companyName}}{{this.companyName}}{{else}}{{this.firstName}} {{this.lastName}}{{/if}}
+                </div>
+                <div>
+                    <span class="status-badge {{#if this.isActive}}status-active{{else}}status-inactive{{/if}}">
+                        {{#if this.isActive}}ACTIVO{{else}}INACTIVO{{/if}}
+                    </span>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                <div>
+                    <strong>Email:</strong> {{this.email}}
+                </div>
+                <div>
+                    <strong>Teléfono:</strong> {{this.phone}}
+                </div>
+                <div>
+                    <strong>Tanques:</strong> {{this.tanksCount}}
+                </div>
+            </div>
+            {{#if this.tanks}}
+            <div class="tank-grid">
+                {{#each this.tanks}}
+                <div class="tank-card">
+                    <div class="tank-code">{{this.code}}</div>
+                    <div class="tank-info">
+                        Nivel:
+                        <span class="{{#if (lt this.currentLevelPercentage 10)}}critical{{else if (lt this.currentLevelPercentage 20)}}warning{{else}}normal{{/if}}">
+                            {{percentage this.currentLevelPercentage}}
+                        </span>
+                    </div>
+                    <div class="tank-info">Ubicación: {{this.location}}</div>
+                </div>
+                {{/each}}
+            </div>
+            {{/if}}
+        </div>
+        {{/each}}
+    </div>
+
+    <!-- Estadísticas de Consumo -->
+    <div class="section">
+        <h2 class="section-title">Estadísticas de Consumo</h2>
+        <div class="chart-container">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                <div>
+                    <h3>Consumo Total del Período</h3>
+                    <p style="font-size: 32px; color: #667eea; font-weight: bold;">{{liters consumptionStats.totalConsumption}}</p>
+                </div>
+                <div>
+                    <h3>Consumo Diario Promedio</h3>
+                    <p style="font-size: 32px; color: #764ba2; font-weight: bold;">{{liters consumptionStats.dailyAverage}}</p>
+                </div>
+            </div>
+        </div>
+
+        {{#if topConsumers}}
+        <h3 style="margin-top: 20px;">Mayores Consumidores</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tanque</th>
+                    <th>Cliente</th>
+                    <th>Consumo Total</th>
+                    <th>Consumo Diario</th>
+                    <th>% del Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each topConsumers}}
+                <tr>
+                    <td>{{this.tank.code}}</td>
+                    <td>{{#if this.client.companyName}}{{this.client.companyName}}{{else}}{{this.client.firstName}}{{/if}}</td>
+                    <td>{{liters this.totalConsumption}}</td>
+                    <td>{{liters this.dailyAverage}}</td>
+                    <td>{{percentage this.percentageOfTotal}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        {{/if}}
+    </div>
+
+    <div class="footer">
+        <p><strong>Sistema de Monitoreo de Tanques de Gas</strong></p>
+        <p>Informe General del Sistema - Generado automáticamente</p>
+        <p>{{formatDate generatedDate}}</p>
+        <p>Este documento contiene información confidencial del sistema</p>
+    </div>
+</body>
+</html>

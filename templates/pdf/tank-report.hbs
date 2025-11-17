@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .info-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .info-item {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+
+        .info-label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .table-section {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        thead {
+            background: #667eea;
+            color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .chart-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .consumption-bar {
+            width: 100%;
+            height: 30px;
+            background: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .consumption-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-top: 2px solid #dee2e6;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .alert-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .alert-info {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .alert-critical {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .statistics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .page-break {
+            page-break-after: always;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>INFORME DE TANQUE DE GAS</h1>
+        <p>Generado el {{formatDate generatedDate}}</p>
+    </div>
+
+    <!-- Información del Tanque -->
+    <div class="info-section">
+        <h2 class="section-title">Información del Tanque</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Código del Tanque</div>
+                <div class="info-value">{{tank.code}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Estado</div>
+                <div class="info-value">
+                    <span class="status-badge {{#ifEquals tank.status 'active'}}status-active{{else}}status-inactive{{/ifEquals}}">
+                        {{tank.status}}
+                    </span>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Capacidad Total</div>
+                <div class="info-value">{{liters tank.capacityLiters}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Nivel Actual</div>
+                <div class="info-value">{{liters tank.currentLevelLiters}} ({{percentage tank.currentLevelPercentage}})</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Ubicación</div>
+                <div class="info-value">{{tank.location}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Consumo Diario Promedio</div>
+                <div class="info-value">{{liters tank.dailyConsumption}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Última Recarga</div>
+                <div class="info-value">{{formatDate tank.lastRechargeDate}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Cantidad Última Recarga</div>
+                <div class="info-value">{{liters tank.lastRechargeAmount}}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Información del Cliente -->
+    {{#if client}}
+    <div class="info-section">
+        <h2 class="section-title">Información del Cliente</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Nombre/Empresa</div>
+                <div class="info-value">{{#if client.companyName}}{{client.companyName}}{{else}}{{client.firstName}} {{client.lastName}}{{/if}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Identificación</div>
+                <div class="info-value">{{client.identificationType}}: {{client.identificationNumber}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Email</div>
+                <div class="info-value">{{client.email}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Teléfono</div>
+                <div class="info-value">{{client.phone}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Dirección</div>
+                <div class="info-value">{{client.address}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Umbral Nivel Bajo</div>
+                <div class="info-value">{{percentage client.lowGasThreshold}}</div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    <!-- Estadísticas -->
+    <div class="chart-section">
+        <h2 class="section-title">Estadísticas del Período</h2>
+        <div class="statistics-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{statistics.totalConsumption}}</div>
+                <div class="stat-label">Litros Consumidos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{statistics.totalRecharges}}</div>
+                <div class="stat-label">Recargas Realizadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{statistics.averageDailyConsumption}}</div>
+                <div class="stat-label">Consumo Diario Promedio (L)</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <div class="info-label">Nivel de Gas Actual</div>
+            <div class="consumption-bar">
+                <div class="consumption-fill" style="width: {{tank.currentLevelPercentage}}%;">
+                    {{percentage tank.currentLevelPercentage}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historial de Recargas -->
+    {{#if recharges}}
+    <div class="table-section">
+        <h2 class="section-title">Historial de Recargas</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha Programada</th>
+                    <th>Fecha Completada</th>
+                    <th>Cantidad Estimada</th>
+                    <th>Cantidad Real</th>
+                    <th>Estado</th>
+                    <th>Solicitado Por</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each recharges}}
+                <tr>
+                    <td>{{formatDate this.scheduledDate}}</td>
+                    <td>{{formatDate this.completedDate}}</td>
+                    <td>{{liters this.estimatedQuantityLiters}}</td>
+                    <td>{{liters this.actualQuantityLiters}}</td>
+                    <td>
+                        <span class="status-badge {{#ifEquals this.status 'completed'}}status-active{{else}}status-inactive{{/ifEquals}}">
+                            {{this.status}}
+                        </span>
+                    </td>
+                    <td>{{this.requestedBy}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{/if}}
+
+    <div class="page-break"></div>
+
+    <!-- Alertas Recientes -->
+    {{#if alerts}}
+    <div class="table-section">
+        <h2 class="section-title">Alertas Recientes</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Tipo</th>
+                    <th>Severidad</th>
+                    <th>Estado</th>
+                    <th>Mensaje</th>
+                    <th>Nivel de Gas</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each alerts}}
+                <tr>
+                    <td>{{formatDate this.createdAt}}</td>
+                    <td>{{this.type}}</td>
+                    <td>
+                        <span class="alert-badge alert-{{this.severity}}">
+                            {{alertSeverity this.severity}}
+                        </span>
+                    </td>
+                    <td>{{alertStatus this.status}}</td>
+                    <td>{{this.message}}</td>
+                    <td>{{percentage this.gasLevelAtAlert}}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{/if}}
+
+    <!-- Historial de Suministros -->
+    {{#if supplies}}
+    <div class="table-section">
+        <h2 class="section-title">Historial de Suministros</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Cantidad</th>
+                    <th>Nivel Anterior</th>
+                    <th>Nivel Posterior</th>
+                    <th>Factura</th>
+                    <th>Costo</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each supplies}}
+                <tr>
+                    <td>{{formatDate this.supplyDate}}</td>
+                    <td>{{liters this.quantityLiters}}</td>
+                    <td>{{percentage this.previousLevel}}</td>
+                    <td>{{percentage this.currentLevel}}</td>
+                    <td>{{this.invoiceNumber}}</td>
+                    <td>{{currency this.cost}}</td>
+                    <td>
+                        <span class="status-badge {{#ifEquals this.status 'completed'}}status-active{{else}}status-inactive{{/ifEquals}}">
+                            {{this.status}}
+                        </span>
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{/if}}
+
+    <!-- Gráfico de Consumo (placeholder) -->
+    {{#if consumptionHistory}}
+    <div class="chart-section">
+        <h2 class="section-title">Historial de Consumo (Últimos 30 días)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Nivel (%)</th>
+                    <th>Nivel (L)</th>
+                    <th>Consumo (L/h)</th>
+                    <th>Temperatura</th>
+                    <th>Presión</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each consumptionHistory}}
+                <tr>
+                    <td>{{formatDate this.recordedAt}}</td>
+                    <td>{{percentage this.gasLevelPercentage}}</td>
+                    <td>{{liters this.gasLevelLiters}}</td>
+                    <td>{{this.consumptionRate}}</td>
+                    <td>{{this.temperature}}°C</td>
+                    <td>{{this.pressure}} bar</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{/if}}
+
+    <div class="footer">
+        <p><strong>Sistema de Monitoreo de Tanques de Gas</strong></p>
+        <p>Este informe fue generado automáticamente el {{formatDate generatedDate}}</p>
+        <p>Para más información, contacte al administrador del sistema</p>
+    </div>
+</body>
+</html>
