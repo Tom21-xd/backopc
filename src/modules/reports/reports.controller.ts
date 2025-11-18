@@ -66,7 +66,7 @@ export class ReportsController {
   @Get('export')
   async exportReport(
     @Query('type') type: string,
-    @Query('format') format: 'json' | 'pdf' = 'json',
+    @Query('format') format: 'json' | 'pdf' | 'excel' = 'json',
     @Query() params: any,
     @CurrentUser() user: User,
     @Res() res: Response,
@@ -79,6 +79,10 @@ export class ReportsController {
 
     if (format === 'pdf') {
       res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="${result.filename}"`);
+      res.send(result.data);
+    } else if (format === 'excel') {
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       res.setHeader('Content-Disposition', `attachment; filename="${result.filename}"`);
       res.send(result.data);
     } else {

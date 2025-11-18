@@ -32,8 +32,8 @@ export class SensorsController {
 
   @Post('simulate/:tankId/start')
   @Roles(UserRole.ADMIN)
-  startSimulation(@Param('tankId') tankId: string) {
-    this.sensorSimulator.startSimulation(tankId);
+  async startSimulation(@Param('tankId') tankId: string) {
+    await this.sensorSimulator.startSimulation(tankId);
     return {
       message: 'Simulación iniciada',
       tankId,

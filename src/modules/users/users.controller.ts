@@ -180,15 +180,6 @@ export class UsersController {
     return this.usersService.resetUserPassword(id);
   }
 
-  // Asignar cliente a usuario (solo admin)
-  @Patch(':id/assign-client')
-  @Roles(UserRole.ADMIN)
-  assignClient(
-    @Param('id') id: string,
-    @Body('clientId') clientId: string,
-  ) {
-    return this.usersService.assignClient(id, clientId);
-  }
 
   // Obtener historial de actividad del usuario (solo admin)
   @Get(':id/activity')

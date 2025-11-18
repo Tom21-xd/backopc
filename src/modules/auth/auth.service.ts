@@ -8,7 +8,6 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User, UserRole } from '../../entities/user.entity';
-import { Client } from '../../entities/client.entity';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { AdminCreateUserDto } from './dto/admin-create-user.dto';
@@ -19,8 +18,6 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @InjectRepository(Client)
-    private clientRepository: Repository<Client>,
     private jwtService: JwtService,
   ) {}
 
@@ -47,31 +44,13 @@ export class AuthService {
     }
 
     // Verificar si el número de identificación ya existe
-    const existingClient = await this.clientRepository.findOne({
+    const existingUserByIdentification = await this.userRepository.findOne({
       where: { identificationNumber },
     });
 
-    if (existingClient) {
+    if (existingUserByIdentification) {
       throw new ConflictException('El número de identificación ya está registrado');
     }
-
-    // Crear cliente (todos los usuarios registrados son clientes)
-    const client = this.clientRepository.create({
-      companyName: companyName || null, // Puede ser null si no tiene empresa
-      firstName,
-      lastName,
-      identificationType,
-      identificationNumber,
-      email,
-      notificationEmail: email,
-      phone: phone || '',
-      address: address || '',
-      isActive: true,
-      lowGasThreshold: 20,
-      criticalGasThreshold: 10,
-    });
-
-    await this.clientRepository.save(client);
 
     // Crear el usuario (siempre como CLIENT)
     const user = this.userRepository.create({
@@ -237,11 +216,11 @@ export class AuthService {
     }
 
     // Verificar si el número de identificación ya existe
-    const existingClient = await this.clientRepository.findOne({
+    const existingUserByIdentification = await this.userRepository.findOne({
       where: { identificationNumber },
     });
 
-    if (existingClient) {
+    if (existingUserByIdentification) {
       throw new ConflictException('El número de identificación ya está registrado');
     }
 

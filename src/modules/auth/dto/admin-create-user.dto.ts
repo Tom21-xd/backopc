@@ -6,8 +6,7 @@ import {
   IsEnum,
   IsNotEmpty,
 } from 'class-validator';
-import { UserRole } from '../../../entities/user.entity';
-import { IdentificationType } from '../../../entities/client.entity';
+import { UserRole, IdentificationType } from '../../../entities/user.entity';
 
 export class AdminCreateUserDto {
   @IsString()

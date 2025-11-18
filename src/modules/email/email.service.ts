@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
+import * as path from 'path';
 
 export interface EmailOptions {
   to: string | string[];
@@ -13,8 +14,27 @@ export interface EmailOptions {
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
+  private readonly logoPath: string;
 
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(private readonly mailerService: MailerService) {
+    this.logoPath = path.join(
+      __dirname,
+      '..',
+      '..',
+      '..',
+      'src',
+      'img',
+      'gasCaqueta.png',
+    );
+  }
+
+  private getLogoAttachment() {
+    return {
+      filename: 'logo.png',
+      path: this.logoPath,
+      cid: 'logo',
+    };
+  }
 
   async sendEmail(options: EmailOptions): Promise<boolean> {
     try {
@@ -51,9 +71,16 @@ export class EmailService {
       context: {
         reportType: this.getReportTypeName(reportType),
         reportData,
-        generatedDate: new Date(),
+        generatedDate: new Date().toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
       },
       attachments: [
+        this.getLogoAttachment(),
         {
           filename: fileName,
           content: pdfBuffer,
@@ -76,9 +103,16 @@ export class EmailService {
         alert,
         tank,
         alertType: this.getAlertTypeName(alert.type),
-        severity: this.getSeverityName(alert.severity),
-        generatedDate: new Date(),
+        severity: alert.severity,
+        generatedDate: new Date().toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
       },
+      attachments: [this.getLogoAttachment()],
     });
   }
 

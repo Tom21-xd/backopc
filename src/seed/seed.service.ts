@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User, UserRole } from '../entities/user.entity';
-import { Client, IdentificationType } from '../entities/client.entity';
 import { Tank, TankStatus, TankType } from '../entities/tank.entity';
 import { Sensor, SensorStatus } from '../entities/sensor.entity';
 import * as bcrypt from 'bcrypt';
@@ -14,8 +13,6 @@ export class SeedService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @InjectRepository(Client)
-    private clientRepository: Repository<Client>,
     @InjectRepository(Tank)
     private tankRepository: Repository<Tank>,
     @InjectRepository(Sensor)
@@ -147,8 +144,8 @@ export class SeedService {
     }
 
     // Ahora crear tanques de clientes
-    const clients = await this.clientRepository.find({
-      where: { isActive: true },
+    const clients = await this.userRepository.find({
+      where: { role: UserRole.CLIENT, isActive: true },
     });
 
     const tanksData = [

@@ -2,100 +2,172 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            font-family: 'Helvetica', 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', 'Helvetica Neue', 'Arial', sans-serif;
+            background-color: #F3F4F6;
             margin: 0;
             padding: 0;
+            line-height: 1.6;
         }
         .container {
             max-width: 600px;
-            margin: 40px auto;
+            margin: 30px auto;
             background-color: #ffffff;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .logo-section {
+            background: #ffffff;
+            padding: 25px;
+            text-align: center;
+            border-bottom: 2px solid #E5E7EB;
+        }
+        .logo-section img {
+            max-width: 150px;
+            height: auto;
         }
         .header {
             padding: 30px;
             text-align: center;
         }
         .header.critical {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
             color: white;
         }
         .header.warning {
-            background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
-            color: #333;
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: white;
         }
         .header.info {
-            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
             color: white;
         }
         .header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.95;
+            font-size: 14px;
         }
         .content {
-            padding: 30px;
+            padding: 35px;
+            color: #374151;
+        }
+        .content h2 {
+            color: #1F2937;
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .content h3 {
+            color: #1F2937;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #E5E7EB;
+            padding-bottom: 8px;
         }
         .alert-box {
-            background-color: #fff3cd;
-            border: 1px solid #ffeeba;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 20px 0;
+            background-color: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
         }
         .alert-box.critical {
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
+            background-color: #FEE2E2;
+            border-left-color: #DC2626;
         }
         .alert-box.info {
-            background-color: #d1ecf1;
-            border-color: #bee5eb;
+            background-color: #DBEAFE;
+            border-left-color: #3B82F6;
+        }
+        .alert-box p {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
         }
         .data-table {
             width: 100%;
             margin: 20px 0;
+            border-collapse: collapse;
         }
         .data-table td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+            padding: 14px 12px;
+            border-bottom: 1px solid #E5E7EB;
         }
         .data-table td:first-child {
-            font-weight: bold;
-            width: 40%;
-            color: #666;
+            font-weight: 600;
+            width: 45%;
+            color: #6B7280;
+            font-size: 14px;
+        }
+        .data-table td:last-child {
+            color: #1F2937;
+            font-weight: 500;
+        }
+        .data-table tr:last-child td {
+            border-bottom: none;
         }
         .button {
             display: inline-block;
-            padding: 12px 30px;
-            background-color: #667eea;
+            padding: 14px 35px;
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
             color: white;
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(30, 58, 138, 0.3);
+        }
+        .action-box {
+            background-color: #F3F4F6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .action-box p {
+            margin: 8px 0;
         }
         .footer {
-            background-color: #f8f9fa;
-            padding: 20px;
+            background: linear-gradient(135deg, #1F2937 0%, #374151 100%);
+            padding: 25px;
             text-align: center;
-            color: #666;
-            font-size: 12px;
+            color: #D1D5DB;
+            font-size: 13px;
+        }
+        .footer p {
+            margin: 8px 0;
+        }
+        .footer strong {
+            color: #F9FAFB;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo-section">
+            <img src="cid:logo" alt="Gas Caquetá">
+        </div>
         <div class="header {{severity}}">
             <h1>⚠️ ALERTA DEL SISTEMA</h1>
+            <p>Gas Caquetá - Sistema de Monitoreo de Tanques</p>
         </div>
         <div class="content">
             <h2>{{alertType}}</h2>
 
             <div class="alert-box {{severity}}">
-                <p><strong>{{alert.message}}</strong></p>
+                <p>{{alert.message}}</p>
             </div>
 
             <h3>Información del Tanque</h3>
@@ -146,27 +218,30 @@
                 </tr>
             </table>
 
-            <p><strong>Acción Recomendada:</strong></p>
-            {{#if (eq alert.type 'critical_level')}}
-                <p>El nivel de gas es crítico. Se recomienda programar una recarga inmediata para evitar quedarse sin suministro.</p>
-            {{else if (eq alert.type 'low_level')}}
-                <p>El nivel de gas está bajo. Se recomienda programar una recarga en los próximos días.</p>
-            {{else if (eq alert.type 'sensor_failure')}}
-                <p>Se ha detectado una falla en el sensor. Contacte al servicio técnico para revisar el equipo.</p>
-            {{else if (eq alert.type 'consumption_anomaly')}}
-                <p>Se ha detectado un consumo anormal. Verifique posibles fugas o mal funcionamiento del sistema.</p>
-            {{else}}
-                <p>Revise el sistema y tome las medidas necesarias según el tipo de alerta.</p>
-            {{/if}}
+            <div class="action-box">
+                <p><strong>📋 Acción Recomendada:</strong></p>
+                {{#if (eq alert.type 'critical_level')}}
+                    <p>El nivel de gas es crítico. Se recomienda programar una recarga inmediata para evitar quedarse sin suministro.</p>
+                {{else if (eq alert.type 'low_level')}}
+                    <p>El nivel de gas está bajo. Se recomienda programar una recarga en los próximos días.</p>
+                {{else if (eq alert.type 'sensor_failure')}}
+                    <p>Se ha detectado una falla en el sensor. Contacte al servicio técnico para revisar el equipo.</p>
+                {{else if (eq alert.type 'consumption_anomaly')}}
+                    <p>Se ha detectado un consumo anormal. Verifique posibles fugas o mal funcionamiento del sistema.</p>
+                {{else}}
+                    <p>Revise el sistema y tome las medidas necesarias según el tipo de alerta.</p>
+                {{/if}}
+            </div>
 
             <center>
-                <a href="{{process.env.FRONTEND_URL}}/alerts" class="button">Ver en el Sistema</a>
+                <a href="{{process.env.FRONTEND_URL}}/alerts" class="button">Ver Detalles en el Sistema</a>
             </center>
         </div>
         <div class="footer">
-            <p>Esta es una notificación automática del Sistema de Monitoreo de Tanques de Gas</p>
-            <p>Por favor, no responda a este correo</p>
-            <p>Si necesita asistencia, contacte al administrador del sistema</p>
+            <p><strong>Gas Caquetá</strong></p>
+            <p>Sistema de Monitoreo de Tanques de Gas - Notificación Automática</p>
+            <p>Este es un correo generado automáticamente. Por favor, no responda a este mensaje.</p>
+            <p>Si necesita asistencia, contacte al administrador del sistema.</p>
         </div>
     </div>
 </body>

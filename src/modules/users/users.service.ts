@@ -8,7 +8,6 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Like, In, Between } from 'typeorm';
 import { User, UserRole } from '../../entities/user.entity';
-import { Client } from '../../entities/client.entity';
 import { Tank } from '../../entities/tank.entity';
 import { Alert } from '../../entities/alert.entity';
 import { Recharge } from '../../entities/recharge.entity';
@@ -33,8 +32,6 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @InjectRepository(Client)
-    private clientRepository: Repository<Client>,
     @InjectRepository(Tank)
     private tankRepository: Repository<Tank>,
     @InjectRepository(Alert)
@@ -241,7 +238,7 @@ export class UsersService {
   async getUserProfile(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id },
-      relations: ['client', 'client.tanks', 'client.preferences'],
+      relations: ['client', 'client.tanks'],
     });
 
     if (!user) {
@@ -361,24 +358,6 @@ export class UsersService {
     } as any;
   }
 
-  // ASIGNAR CLIENTE A USUARIO
-  async assignClient(userId: string, clientId: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
-    const client = await this.clientRepository.findOne({ where: { id: clientId } });
-
-    if (!user) {
-      throw new NotFoundException(`Usuario con ID ${userId} no encontrado`);
-    }
-
-    if (!client) {
-      throw new NotFoundException(`Cliente con ID ${clientId} no encontrado`);
-    }
-
-    // Ya no usamos client separado, la información está en user
-    const updatedUser = await this.userRepository.save(user);
-    const { password, ...result } = updatedUser;
-    return result as User;
-  }
 
   // ACTUALIZAR CONFIGURACIÓN DE NOTIFICACIONES
   async updateNotificationSettings(

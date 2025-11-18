@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsEnum,
 } from 'class-validator';
-import { IdentificationType } from '../../../entities/client.entity';
+import { IdentificationType } from '../../../entities/user.entity';
 
 export class RegisterDto {
   @IsString()

@@ -17,6 +17,13 @@ export enum UserRole {
   CLIENT = 'client', // Cliente
 }
 
+export enum IdentificationType {
+  CEDULA = 'cedula',
+  NIT = 'nit',
+  PASAPORTE = 'pasaporte',
+  EXTRANJERIA = 'extranjeria',
+}
+
 @Entity('usuarios')
 export class User {
   @PrimaryGeneratedColumn('uuid')

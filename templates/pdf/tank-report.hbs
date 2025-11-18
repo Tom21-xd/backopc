@@ -10,28 +10,41 @@
         }
 
         body {
-            font-family: 'Helvetica', 'Arial', sans-serif;
-            color: #333;
+            font-family: 'Segoe UI', 'Helvetica Neue', 'Arial', sans-serif;
+            color: #1F2937;
             line-height: 1.6;
+            background: #F9FAFB;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            max-width: 180px;
+            height: auto;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
             color: white;
-            padding: 30px;
+            padding: 32px 35px;
             text-align: center;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
             margin: 0;
             font-size: 28px;
-            font-weight: bold;
+            font-weight: 700;
+            letter-spacing: -0.4px;
         }
 
         .header p {
-            margin: 5px 0 0 0;
+            margin: 8px 0 0 0;
             font-size: 14px;
             opacity: 0.9;
         }
@@ -94,21 +107,25 @@
 
         .section-title {
             font-size: 20px;
-            color: #333;
+            font-weight: 700;
+            color: #1F2937;
             margin-bottom: 15px;
             padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
+            border-bottom: 3px solid #1E3A8A;
+            letter-spacing: -0.3px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         thead {
-            background: #667eea;
+            background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%);
             color: white;
         }
 
@@ -200,8 +217,8 @@
 
         .stat-value {
             font-size: 32px;
-            font-weight: bold;
-            color: #667eea;
+            font-weight: 700;
+            color: #1E3A8A;
             margin-bottom: 5px;
         }
 
@@ -216,8 +233,13 @@
     </style>
 </head>
 <body>
+    <div class="logo-container">
+        <img src="file:///C:/Users/USER/Desktop/U/Danna/opcDanna/backopc/src/img/gasCaqueta.png" alt="Gas Caquetá Logo" class="logo">
+    </div>
+
     <div class="header">
         <h1>INFORME DE TANQUE DE GAS</h1>
+        <p>Gas Caquetá - Sistema de Monitoreo</p>
         <p>Generado el {{formatDate generatedDate}}</p>
     </div>
 
@@ -466,7 +488,7 @@
     {{/if}}
 
     <div class="footer">
-        <p><strong>Sistema de Monitoreo de Tanques de Gas</strong></p>
+        <p><strong>Gas Caquetá - Sistema de Monitoreo de Tanques de Gas</strong></p>
         <p>Este informe fue generado automáticamente el {{formatDate generatedDate}}</p>
         <p>Para más información, contacte al administrador del sistema</p>
     </div>

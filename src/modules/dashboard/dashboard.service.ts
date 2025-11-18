@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between, LessThanOrEqual, MoreThanOrEqual } from 'typeorm';
 import { Tank, TankStatus } from '../../entities/tank.entity';
-import { Client } from '../../entities/client.entity';
 import { Alert, AlertStatus } from '../../entities/alert.entity';
 import { Recharge, RechargeStatus } from '../../entities/recharge.entity';
 import { Supply } from '../../entities/supply.entity';
@@ -14,8 +13,6 @@ export class DashboardService {
   constructor(
     @InjectRepository(Tank)
     private tankRepository: Repository<Tank>,
-    @InjectRepository(Client)
-    private clientRepository: Repository<Client>,
     @InjectRepository(Alert)
     private alertRepository: Repository<Alert>,
     @InjectRepository(Recharge)
@@ -46,8 +43,8 @@ export class DashboardService {
     ] = await Promise.all([
       this.tankRepository.count(),
       this.tankRepository.count({ where: { status: TankStatus.ACTIVE } }),
-      this.clientRepository.count(),
-      this.clientRepository.count({ where: { isActive: true } }),
+      this.userRepository.count({ where: { role: UserRole.CLIENT } }),
+      this.userRepository.count({ where: { role: UserRole.CLIENT, isActive: true } }),
       this.userRepository.count(),
     ]);
 

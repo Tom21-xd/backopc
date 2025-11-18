@@ -8,9 +8,9 @@ import { Alert } from '../../entities/alert.entity';
 import { Recharge } from '../../entities/recharge.entity';
 import { MonitoringHistory } from '../../entities/monitoring-history.entity';
 import { User } from '../../entities/user.entity';
-import { Client } from '../../entities/client.entity';
 import { PdfModule } from '../pdf/pdf.module';
 import { EmailModule } from '../email/email.module';
+import { ExcelModule } from '../excel/excel.module';
 
 @Module({
   imports: [
@@ -21,10 +21,10 @@ import { EmailModule } from '../email/email.module';
       Recharge,
       MonitoringHistory,
       User,
-      Client,
     ]),
     PdfModule,
     EmailModule,
+    ExcelModule,
   ],
   controllers: [ReportsController],
   providers: [ReportsService],

@@ -9,6 +9,7 @@ import { MonitoringHistory } from '../../entities/monitoring-history.entity';
 import { User, UserRole } from '../../entities/user.entity';
 import { PdfService } from '../pdf/pdf.service';
 import { EmailService } from '../email/email.service';
+import { ExcelService } from '../excel/excel.service';
 
 @Injectable()
 export class ReportsService {
@@ -27,6 +28,7 @@ export class ReportsService {
     private userRepository: Repository<User>,
     private pdfService: PdfService,
     private emailService: EmailService,
+    private excelService: ExcelService,
   ) {}
 
   async getGeneralReport(startDate: Date, endDate: Date, userId?: string, userRole?: UserRole) {
@@ -392,7 +394,7 @@ export class ReportsService {
     );
   }
 
-  async exportReport(reportType: string, params: any, format: 'json' | 'pdf' = 'json') {
+  async exportReport(reportType: string, params: any, format: 'json' | 'pdf' | 'excel' = 'json') {
     if (format === 'pdf') {
       const pdfBuffer = await this.generatePdfReport(
         reportType as any,
@@ -402,6 +404,18 @@ export class ReportsService {
         type: 'application/pdf',
         data: pdfBuffer,
         filename: `${reportType}-report-${new Date().toISOString().split('T')[0]}.pdf`,
+      };
+    }
+
+    if (format === 'excel') {
+      const excelBuffer = await this.generateExcelReport(
+        reportType as any,
+        params,
+      );
+      return {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        data: excelBuffer,
+        filename: `${reportType}-report-${new Date().toISOString().split('T')[0]}.xlsx`,
       };
     }
 
@@ -439,6 +453,40 @@ export class ReportsService {
       data: reportData,
       generatedAt: new Date(),
     };
+  }
+
+  async generateExcelReport(
+    reportType: 'general' | 'tank' | 'client',
+    params: any,
+  ): Promise<Buffer> {
+    let reportData: any;
+
+    switch (reportType) {
+      case 'general':
+        reportData = await this.getGeneralReport(
+          new Date(params.startDate),
+          new Date(params.endDate),
+          params.userId,
+          params.userRole,
+        );
+        return await this.excelService.generateGeneralReportExcel(reportData);
+      case 'tank':
+        reportData = await this.getTankReport(
+          params.tankId,
+          new Date(params.startDate),
+          new Date(params.endDate),
+        );
+        return await this.excelService.generateTankReportExcel(reportData);
+      case 'client':
+        reportData = await this.getClientReport(
+          params.clientId,
+          new Date(params.startDate),
+          new Date(params.endDate),
+        );
+        return await this.excelService.generateClientReportExcel(reportData);
+      default:
+        throw new Error('Tipo de reporte no válido');
+    }
   }
 
   private async calculateConsumptionStats(

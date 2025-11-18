@@ -2,89 +2,170 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            font-family: 'Helvetica', 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', 'Helvetica Neue', 'Arial', sans-serif;
+            background-color: #F3F4F6;
             margin: 0;
             padding: 0;
+            line-height: 1.6;
         }
         .container {
             max-width: 600px;
-            margin: 40px auto;
+            margin: 30px auto;
             background-color: #ffffff;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .logo-section {
+            background: #ffffff;
+            padding: 25px;
+            text-align: center;
+            border-bottom: 2px solid #E5E7EB;
+        }
+        .logo-section img {
+            max-width: 150px;
+            height: auto;
         }
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
             color: white;
-            padding: 30px;
+            padding: 35px;
             text-align: center;
         }
         .header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.95;
+            font-size: 14px;
         }
         .content {
-            padding: 30px;
+            padding: 35px;
+            color: #374151;
+        }
+        .content h2 {
+            color: #1F2937;
+            font-size: 22px;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .content p {
+            margin: 15px 0;
+            line-height: 1.7;
         }
         .button {
             display: inline-block;
-            padding: 12px 30px;
-            background-color: #667eea;
+            padding: 14px 35px;
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
             color: white;
             text-decoration: none;
-            border-radius: 5px;
-            margin-top: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            font-weight: 600;
+            box-shadow: 0 2px 6px rgba(30, 58, 138, 0.3);
         }
         .footer {
-            background-color: #f8f9fa;
-            padding: 20px;
+            background: linear-gradient(135deg, #1F2937 0%, #374151 100%);
+            padding: 25px;
             text-align: center;
-            color: #666;
-            font-size: 12px;
+            color: #D1D5DB;
+            font-size: 13px;
+        }
+        .footer p {
+            margin: 8px 0;
+        }
+        .footer strong {
+            color: #F9FAFB;
+            font-size: 14px;
         }
         .info-box {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
-            border-left: 4px solid #667eea;
+            background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            border-left: 4px solid #1E3A8A;
+        }
+        .info-box p {
+            margin: 10px 0;
+            font-size: 15px;
+        }
+        .info-box strong {
+            color: #1E3A8A;
+            font-weight: 600;
+        }
+        .attachment-notice {
+            background-color: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            padding: 18px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        .attachment-notice p {
+            margin: 5px 0;
+        }
+        .greeting {
+            font-size: 16px;
+            color: #1F2937;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo-section">
+            <img src="cid:logo" alt="Gas Caquetá">
+        </div>
         <div class="header">
-            <h1>Sistema de Monitoreo de Tanques de Gas</h1>
+            <h1>📊 Informe Generado</h1>
+            <p>Gas Caquetá - Sistema de Monitoreo de Tanques</p>
         </div>
         <div class="content">
-            <h2>{{reportType}} Generado</h2>
-            <p>Estimado usuario,</p>
-            <p>Se ha generado exitosamente el <strong>{{reportType}}</strong> solicitado. El informe está adjunto a este correo en formato PDF.</p>
+            <h2>{{reportType}}</h2>
+
+            <p class="greeting">Estimado usuario,</p>
+
+            <p>Se ha generado exitosamente el <strong>{{reportType}}</strong> solicitado.</p>
+
+            <div class="attachment-notice">
+                <p><strong>📎 Archivo Adjunto</strong></p>
+                <p>El informe se encuentra adjunto a este correo en formato PDF de alta calidad, listo para visualizar, imprimir o compartir.</p>
+            </div>
 
             <div class="info-box">
-                <p><strong>Fecha de Generación:</strong> {{generatedDate}}</p>
+                <p><strong>📅 Fecha de Generación:</strong> {{generatedDate}}</p>
                 {{#if reportData.period}}
-                <p><strong>Período:</strong> {{reportData.period.start}} - {{reportData.period.end}}</p>
+                <p><strong>📆 Período:</strong> {{reportData.period.start}} - {{reportData.period.end}}</p>
                 {{/if}}
                 {{#if reportData.tank}}
-                <p><strong>Tanque:</strong> {{reportData.tank.code}}</p>
+                <p><strong>🔧 Tanque:</strong> {{reportData.tank.code}}</p>
                 {{/if}}
                 {{#if reportData.client}}
-                <p><strong>Cliente:</strong> {{reportData.client.name}}</p>
+                <p><strong>👤 Cliente:</strong> {{reportData.client.name}}</p>
                 {{/if}}
             </div>
 
-            <p>Por favor, revise el documento adjunto para ver el informe completo con todos los detalles, gráficos y estadísticas.</p>
+            <p>El documento adjunto contiene información detallada incluyendo:</p>
+            <ul style="line-height: 1.8; color: #374151;">
+                <li>Estadísticas completas del período</li>
+                <li>Análisis de consumo y tendencias</li>
+                <li>Historial de recargas y alertas</li>
+                <li>Gráficos y visualizaciones</li>
+            </ul>
 
-            <p>Si necesita información adicional o tiene alguna pregunta sobre este informe, no dude en contactarnos.</p>
+            <p>Si necesita información adicional, datos en otros formatos (Excel, JSON) o tiene alguna pregunta sobre este informe, no dude en contactarnos.</p>
         </div>
         <div class="footer">
-            <p>Este es un correo automático del Sistema de Monitoreo de Tanques de Gas</p>
-            <p>Por favor, no responda a este correo</p>
+            <p><strong>Gas Caquetá</strong></p>
+            <p>Sistema de Monitoreo de Tanques de Gas - Generación Automática de Informes</p>
+            <p>Este es un correo generado automáticamente. Por favor, no responda a este mensaje.</p>
         </div>
     </div>
 </body>

@@ -98,6 +98,11 @@ export class PdfService {
       return arg1 === arg2 ? options.fn(this) : options.inverse(this);
     });
 
+    // Helper para comparación menor que
+    handlebars.registerHelper('lt', function(arg1, arg2) {
+      return arg1 < arg2;
+    });
+
     // Helper para estado de alerta
     handlebars.registerHelper('alertStatus', (status: string) => {
       const statusMap = {

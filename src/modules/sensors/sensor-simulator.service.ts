@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Tank, TankStatus } from '../../entities/tank.entity';
+import { Tank, TankStatus, TankType } from '../../entities/tank.entity';
 import { Sensor, SensorStatus } from '../../entities/sensor.entity';
 import { TanksService } from '../tanks/tanks.service';
 import { EventEmitter2 } from '@nestjs/event-emitter';
@@ -51,13 +51,33 @@ export class SensorSimulatorService {
     });
 
     for (const tank of activeTanks) {
+      // Excluir tanques de compañía de la emulación
+      if (tank.type === TankType.COMPANY) {
+        this.logger.log(
+          `Tanque ${tank.code} (COMPANY) excluido de la emulación automática`,
+        );
+        continue;
+      }
+
       if (tank.sensor && tank.sensor.status === SensorStatus.ACTIVE) {
         this.startSimulation(tank.id);
       }
     }
   }
 
-  startSimulation(tankId: string) {
+  async startSimulation(tankId: string) {
+    // Validar que el tanque no sea de compañía antes de iniciar
+    const tank = await this.tankRepository.findOne({
+      where: { id: tankId },
+    });
+
+    if (tank && tank.type === TankType.COMPANY) {
+      this.logger.warn(
+        `No se puede iniciar emulación para tanque ${tank.code} - Los tanques de compañía no se emulan`,
+      );
+      return;
+    }
+
     // Detener simulación existente si la hay
     this.stopSimulation(tankId);
 
@@ -104,6 +124,15 @@ export class SensorSimulatorService {
       });
 
       if (!tank || tank.status !== TankStatus.ACTIVE) {
+        this.stopSimulation(tankId);
+        return;
+      }
+
+      // Los tanques de compañía NO deben ser modificados por emulación
+      if (tank.type === TankType.COMPANY) {
+        this.logger.warn(
+          `Simulación omitida para tanque ${tank.code} - Los tanques de compañía no se emulan`,
+        );
         this.stopSimulation(tankId);
         return;
       }
@@ -193,16 +222,6 @@ export class SensorSimulatorService {
         message: `¡NIVEL CRÍTICO! Tanque ${tank.code}: ${levelPercentage.toFixed(2)}% - Requiere recarga inmediata`,
       });
     }
-
-    // Alerta adicional al llegar exactamente al 15%
-    if (Math.floor(levelPercentage) === UMBRAL_ALERTA_PREDEFINIDO) {
-      this.logger.warn(`📢 Tanque ${tank.code} ha alcanzado el 15% de capacidad`);
-      this.eventEmitter.emit('alert.threshold15', {
-        tank,
-        levelPercentage,
-        message: `Tanque ${tank.code} ha alcanzado el umbral del 15% de capacidad`,
-      });
-    }
   }
 
   // Endpoint para simular consumo manual (para pruebas)
@@ -214,6 +233,13 @@ export class SensorSimulatorService {
 
     if (!tank) {
       throw new Error('Tanque no encontrado');
+    }
+
+    // Los tanques de compañía NO deben ser modificados por emulación
+    if (tank.type === TankType.COMPANY) {
+      throw new Error(
+        'No se puede simular consumo en tanques de compañía. Los tanques de compañía solo se modifican durante reabastecimientos.',
+      );
     }
 
     const newLevelLiters = Math.max(0, tank.currentLevelLiters - litersConsumed);
@@ -230,6 +256,13 @@ export class SensorSimulatorService {
 
     if (!tank) {
       throw new Error('Tanque no encontrado');
+    }
+
+    // Los tanques de compañía NO deben ser modificados por emulación
+    if (tank.type === TankType.COMPANY) {
+      throw new Error(
+        'No se puede simular recarga en tanques de compañía. Los tanques de compañía solo se modifican durante reabastecimientos.',
+      );
     }
 
     const newLevelLiters = litersAdded
