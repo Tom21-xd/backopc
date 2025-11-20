@@ -40,7 +40,23 @@ export class PdfService {
     // Register helpers
     this.registerHandlebarsHelpers();
 
-    const html = template(data);
+    // Agregar logo en base64 a los datos
+    const logoPath = path.join(__dirname, '..', '..', '..', 'src', 'img', 'gasCaqueta.png');
+    let logoBase64 = '';
+    try {
+      const logoBuffer = fs.readFileSync(logoPath);
+      logoBase64 = `data:image/png;base64,${logoBuffer.toString('base64')}`;
+    } catch (error) {
+      console.warn('Logo no encontrado:', error.message);
+    }
+
+    // Combinar data con logo
+    const dataWithLogo = {
+      ...data,
+      logo: logoBase64
+    };
+
+    const html = template(dataWithLogo);
 
     const page = await this.browser.newPage();
     await page.setContent(html, { waitUntil: 'networkidle0' });
@@ -72,25 +88,28 @@ export class PdfService {
       });
     });
 
-    // Helper para formatear moneda
-    handlebars.registerHelper('currency', (value: number) => {
-      if (!value) return '$0.00';
-      return new Intl.NumberFormat('es-ES', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(value);
+    // Helper para formatear números con decimales
+    handlebars.registerHelper('number', (value: any, decimals: number = 2) => {
+      if (value === null || value === undefined || value === '') return '0';
+      const numValue = typeof value === 'number' ? value : parseFloat(value);
+      if (isNaN(numValue)) return '0';
+      return numValue.toFixed(decimals);
     });
 
     // Helper para formatear porcentajes
-    handlebars.registerHelper('percentage', (value: number) => {
-      if (value === null || value === undefined) return '0%';
-      return `${value.toFixed(2)}%`;
+    handlebars.registerHelper('percentage', (value: any) => {
+      if (value === null || value === undefined || value === '') return '0%';
+      const numValue = typeof value === 'number' ? value : parseFloat(value);
+      if (isNaN(numValue)) return '0%';
+      return `${numValue.toFixed(2)}%`;
     });
 
     // Helper para formatear litros
-    handlebars.registerHelper('liters', (value: number) => {
-      if (!value) return '0 L';
-      return `${value.toFixed(2)} L`;
+    handlebars.registerHelper('liters', (value: any) => {
+      if (value === null || value === undefined || value === '') return '0 L';
+      const numValue = typeof value === 'number' ? value : parseFloat(value);
+      if (isNaN(numValue)) return '0 L';
+      return `${numValue.toFixed(2)} L`;
     });
 
     // Helper para comparación

@@ -33,7 +33,9 @@ export class ReportsService {
 
   async getGeneralReport(startDate: Date, endDate: Date, userId?: string, userRole?: UserRole) {
     // Construir filtros según el rol
-    const tankFilter: any = {};
+    const tankFilter: any = {
+      type: 'client' // SOLO tanques de clientes, NO de empresa
+    };
     let userTankIds = [];
 
     if (userRole === UserRole.CLIENT && userId) {
@@ -47,7 +49,7 @@ export class ReportsService {
       }
     }
 
-    // Obtener todos los tanques
+    // Obtener todos los tanques (SOLO de clientes)
     const tanks = await this.tankRepository.find({
       where: tankFilter,
       relations: ['client', 'sensor'],

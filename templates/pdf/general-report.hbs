@@ -286,7 +286,11 @@
 </head>
 <body>
     <div class="logo-container">
-        <img src="file:///C:/Users/USER/Desktop/U/Danna/opcDanna/backopc/src/img/gasCaqueta.png" alt="Gas Caquetá Logo" class="logo">
+        {{#if logo}}
+        <img src="{{logo}}" alt="Gas Caquetá Logo" class="logo">
+        {{else}}
+        <h1>Gas Caquetá</h1>
+        {{/if}}
     </div>
 
     <div class="header">
