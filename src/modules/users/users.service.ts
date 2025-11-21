@@ -502,7 +502,7 @@ export class UsersService {
   }
 
   // ELIMINAR USUARIO (SOFT DELETE)
-  async remove(id: string): Promise<{ message: string }> {
+  async remove(id: string): Promise<{ message: string; tanksReleased: number }> {
     const user = await this.userRepository.findOne({
       where: { id },
       relations: ['tanks']
