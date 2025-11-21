@@ -11,7 +11,7 @@ module.exports = {
         DB_HOST: 'localhost',
         DB_PORT: 3306,
         DB_USER: 'root',
-        DB_PASSWORD: '0518',
+        DB_PASSWORD: 'Giecom2024.',
         DB_NAME: 'gas_monitoring_system',
 
         JWT_SECRET: 'tu_clave_secreta_super_segura_cambiar_en_produccion',
