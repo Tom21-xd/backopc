@@ -263,4 +263,41 @@ export class TanksService {
     await this.sensorRepository.save(tank.sensor);
     await this.tankRepository.save(tank);
   }
+
+  async assignClient(tankId: string, clientId?: string): Promise<Tank> {
+    const tank = await this.tankRepository.findOne({
+      where: { id: tankId },
+      relations: ['client', 'sensor'],
+    });
+
+    if (!tank) {
+      throw new NotFoundException('Tanque no encontrado');
+    }
+
+    // Si se proporciona clientId, verificar que sea un cliente válido
+    if (clientId) {
+      const client = await this.userRepository.findOne({
+        where: { id: clientId, role: UserRole.CLIENT },
+      });
+
+      if (!client) {
+        throw new NotFoundException(`No se encontró un cliente con ID ${clientId}`);
+      }
+
+      // Verificar que el cliente esté activo
+      if (!client.isActive) {
+        throw new BadRequestException('No se puede asignar un tanque a un cliente inactivo');
+      }
+
+      tank.client = client;
+      tank.type = TankType.CLIENT;
+    } else {
+      // Desasignar cliente
+      tank.client = null;
+      // Opcionalmente podrías cambiar el tipo a COMPANY o mantenerlo como CLIENT sin usuario
+    }
+
+    const updatedTank = await this.tankRepository.save(tank);
+    return this.findOne(updatedTank.id);
+  }
 }

@@ -503,16 +503,33 @@ export class UsersService {
 
   // ELIMINAR USUARIO (SOFT DELETE)
   async remove(id: string): Promise<{ message: string }> {
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: ['tanks']
+    });
 
     if (!user) {
       throw new NotFoundException(`Usuario con ID ${id} no encontrado`);
     }
 
+    // Desactivar usuario
     user.isActive = false;
     await this.userRepository.save(user);
 
-    return { message: 'Usuario desactivado exitosamente' };
+    // Liberar tanques asignados al usuario
+    if (user.tanks && user.tanks.length > 0) {
+      for (const tank of user.tanks) {
+        tank.client = null;
+        // Opcionalmente, cambiar el estado del tanque a INACTIVE
+        // tank.status = TankStatus.INACTIVE;
+        await this.tankRepository.save(tank);
+      }
+    }
+
+    return {
+      message: 'Usuario desactivado exitosamente',
+      tanksReleased: user.tanks?.length || 0
+    };
   }
 
   // ELIMINAR USUARIO PERMANENTEMENTE

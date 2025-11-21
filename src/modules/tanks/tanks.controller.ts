@@ -13,6 +13,7 @@ import { TanksService } from './tanks.service';
 import { CreateTankDto } from './dto/create-tank.dto';
 import { UpdateTankDto } from './dto/update-tank.dto';
 import { UpdateSensorDto } from './dto/update-sensor.dto';
+import { AssignClientDto } from './dto/assign-client.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -92,6 +93,15 @@ export class TanksController {
     @Body() updateSensorDto: UpdateSensorDto,
   ) {
     return this.tanksService.updateSensor(id, updateSensorDto);
+  }
+
+  @Patch(':id/assign-client')
+  @Roles(UserRole.ADMIN)
+  assignClient(
+    @Param('id') id: string,
+    @Body() assignClientDto: AssignClientDto,
+  ) {
+    return this.tanksService.assignClient(id, assignClientDto.clientId);
   }
 
   @Delete(':id')
